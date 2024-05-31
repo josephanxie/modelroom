@@ -50,7 +50,7 @@ export default {
       scene.add(axesHelper);
 
       // 添加环境光
-      const ambientLight = new THREE.AmbientLight(0x404040, 1); // 添加一些环境光
+      const ambientLight = new THREE.AmbientLight(0xeee, 1); // 添加一些环境光
       scene.add(ambientLight);
 
       // 添加半球光
@@ -60,7 +60,7 @@ export default {
 
       // 加载GLB文件
       const gltfLoader = new GLTFLoader();
-      gltfLoader.load('./model.glb', (gltf) => {
+      gltfLoader.load('../model.glb', (gltf) => {
         const object = gltf.scene;
         object.traverse((child) => {
           if (child.isMesh) {
@@ -77,8 +77,8 @@ export default {
         });
 
         // 调整模型的缩放和位置
-        object.scale.set(0.001, 0.001, 0.001); // 大的缩放因子确保可见性
-        object.position.set(0, 0, 0); // 将模型移到中心位置
+        object.scale.set(0.5, 0.5, 0.5); // 大的缩放因子确保可见性
+        object.position.set(0, 0, 1); // 将模型移到中心位置
         scene.add(object);
         console.log('Model loaded successfully');
 
@@ -99,12 +99,12 @@ export default {
       });
 
       // 创建地面
-      const floorMat = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // 设置地面颜色为浅灰色
-      const floorGeometry = new THREE.BoxGeometry(300, 300, 0.01); // 长300，宽300，高0.01的长方体
-      const floorMesh = new THREE.Mesh(floorGeometry, floorMat);
-      floorMesh.receiveShadow = true; // 地面接收阴影
-      floorMesh.rotation.x = -Math.PI / 2.0; // 将其旋转90度作为地面
-      scene.add(floorMesh);
+      // const floorMat = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // 设置地面颜色为浅灰色
+      // const floorGeometry = new THREE.BoxGeometry(300, 300, 0.001); // 长300，宽300，高0.01的长方体
+      // const floorMesh = new THREE.Mesh(floorGeometry, floorMat);
+      // floorMesh.receiveShadow = true; // 地面接收阴影
+      // floorMesh.rotation.x = -Math.PI / 2.0; // 将其旋转90度作为地面
+      // scene.add(floorMesh);
 
       // 创建平行光
       const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0); // 白色平行光，强度为默认值
