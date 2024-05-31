@@ -6,7 +6,7 @@ This template should help get you started developing with Vue 3 in Vite.
 
 推荐下载github desktop更好管理
 
-
+模型部分已经解决，即项目最主要的部分完成了。现在缺少登录页面，后台管理（数据库）和模型室的制作了。
 
 ## Recommended IDE Setup
 
