@@ -71,7 +71,7 @@ export default {
 
       // 加载GLB文件
       const gltfLoader = new GLTFLoader();
-      gltfLoader.load('../model1.glb', (gltf) => {
+      gltfLoader.load('../model2.glb', (gltf) => {
         const object = gltf.scene;
         object.traverse((child) => {
           if (child.isMesh) {
