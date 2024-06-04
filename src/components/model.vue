@@ -25,6 +25,7 @@ export default {
       const renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.shadowMap.enabled = true; // 启用阴影
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap; // 设置阴影贴图类型
       document.getElementById('three-container').appendChild(renderer.domElement);
 
       // 更新窗口大小时调整相机和渲染器的大小
@@ -50,7 +51,7 @@ export default {
       scene.add(axesHelper);
 
       // 添加环境光
-      const ambientLight = new THREE.AmbientLight(0xeee, 1); // 添加一些环境光
+      const ambientLight = new THREE.AmbientLight(0x999999, 1); // 修改环境光颜色和强度
       scene.add(ambientLight);
 
       // 添加半球光
@@ -58,26 +59,42 @@ export default {
       hemiLight.position.set(0, 200, 0);
       scene.add(hemiLight);
 
+      // 创建平行光
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0); // 白色平行光，强度为默认值
+      directionalLight.position.set(40, 40, 20); // 设置光源位置
+      directionalLight.castShadow = true; // 启用光源的阴影投射
+      scene.add(directionalLight);
+
+      // 调整阴影质量
+      directionalLight.shadow.mapSize.width = 2048; // 提高阴影贴图的质量
+      directionalLight.shadow.mapSize.height = 2048; // 提高阴影贴图的质量
+
       // 加载GLB文件
       const gltfLoader = new GLTFLoader();
-      gltfLoader.load('../model.glb', (gltf) => {
+      gltfLoader.load('../model1.glb', (gltf) => {
         const object = gltf.scene;
         object.traverse((child) => {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
             console.log('Child Mesh:', child);
-            // 设置材质属性确保可见
+
+            // 修改材质属性，确保模型使用金属纹理
             child.material = new THREE.MeshStandardMaterial({
-              color: 0x888888,
-              roughness: 0.7,
-              metalness: 0.0,
+              map: new THREE.TextureLoader().load('../texture.jpg', (texture) => {
+                console.log('Texture loaded', texture);
+              }, undefined, (error) => {
+                console.error('Error loading texture', error);
+              }),
+              metalness: 0.1, // 降低金属度以确保能看到光照效果
+              roughness: 0.1, // 降低粗糙度以确保能看到光照效果
+              envMapIntensity: 10, // 增加环境贴图的强度
             });
           }
         });
 
         // 调整模型的缩放和位置
-        object.scale.set(0.5, 0.5, 0.5); // 大的缩放因子确保可见性
+        object.scale.set(100, 100, 100); // 大的缩放因子确保可见性
         object.position.set(0, 0, 1); // 将模型移到中心位置
         scene.add(object);
         console.log('Model loaded successfully');
@@ -97,24 +114,6 @@ export default {
       (error) => {
         console.error('An error happened', error);
       });
-
-      // 创建地面
-      // const floorMat = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // 设置地面颜色为浅灰色
-      // const floorGeometry = new THREE.BoxGeometry(300, 300, 0.001); // 长300，宽300，高0.01的长方体
-      // const floorMesh = new THREE.Mesh(floorGeometry, floorMat);
-      // floorMesh.receiveShadow = true; // 地面接收阴影
-      // floorMesh.rotation.x = -Math.PI / 2.0; // 将其旋转90度作为地面
-      // scene.add(floorMesh);
-
-      // 创建平行光
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0); // 白色平行光，强度为默认值
-      directionalLight.position.set(40, 40, 20); // 设置光源位置
-      directionalLight.castShadow = true; // 启用光源的阴影投射
-      scene.add(directionalLight);
-
-      // 调整阴影质量
-      directionalLight.shadow.mapSize.width = 512; // 默认是512
-      directionalLight.shadow.mapSize.height = 512; // 默认是512
 
       // 渲染场景
       function animate() {
