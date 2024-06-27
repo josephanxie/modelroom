@@ -86,7 +86,7 @@ export default {
               }, undefined, (error) => {
                 console.error('Error loading texture', error);
               }),
-              metalness: 0.1, // 降低金属度以确保能看到光照效果
+              metalness: 0.5, // 降低金属度以确保能看到光照效果
               roughness: 0.1, // 降低粗糙度以确保能看到光照效果
               envMapIntensity: 10, // 增加环境贴图的强度
             });
@@ -94,7 +94,7 @@ export default {
         });
 
         // 调整模型的缩放和位置
-        object.scale.set(100, 100, 100); // 大的缩放因子确保可见性
+        object.scale.set(50, 50, 50); // 大的缩放因子确保可见性
         object.position.set(0, 0, 1); // 将模型移到中心位置
         scene.add(object);
         console.log('Model loaded successfully');
